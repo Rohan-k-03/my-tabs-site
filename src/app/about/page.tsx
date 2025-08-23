@@ -9,6 +9,7 @@ const About: React.FC = () => {
     heading: "About Me",
     name: "Name: Rohan Khurana",
     studentId: "Student ID: 21358295",
+    studentId: "Course: Bachelor's of Information Technology",
     description:
       "This page is part of the HTML5 Tab Generator project for the university assignment.",
     howToUseHeading: "How to Use This Site",
