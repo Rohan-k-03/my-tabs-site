@@ -211,18 +211,6 @@ const Header: React.FC = () => {
         }
       `}</style>
     </motion.header>
-      <motion.button
-        aria-label="Toggle Dark Mode"
-        onClick={toggleDarkMode}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
-        transition={{ type: "spring", stiffness: 300, damping: 20 }}
-        className="fixed bottom-[84px] right-6 z-50 rounded-full bg-gray-200 p-3 shadow-lg text-2xl text-gray-700 dark:bg-gray-700 dark:text-gray-200 border border-blue-200 dark:border-blue-900"
-        style={{ pointerEvents: "auto" }}
-      >
-        {darkMode ? "🌙" : "☀️"}
-      </motion.button>
-
   );
 };
 
