@@ -3,11 +3,7 @@ import React from "react";
 import { motion, Variants } from "framer-motion";
 
 const courtTasks = [
-  "Review the case files carefully.",
-  "Examine the evidence presented.",
-  "Listen to witness testimonies.",
-  "Analyze legal precedents.",
-  "Prepare your closing argument.",
+Coming soon...
 ];
 
 const containerVariants: Variants = {
