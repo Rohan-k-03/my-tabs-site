@@ -182,7 +182,7 @@ const About: React.FC = () => {
         >
           <iframe
             className="w-full h-full"
-            src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+            src="https://youtu.be/kOAy0Scivuw"
             title="About Video"
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
