@@ -1,37 +1,37 @@
 @import "tailwindcss";
 
 
-/* general layout */
+/* --- general layout --- */
 html, body {
   min-height: 100vh;
 }
 
 body, html {
-  background: #f9fafb;
+  background: #fbf9f9;
   font-family: "Inter", sans-serif;
 }
 .dark .texty{
-  color: #f9fafb;
+  color: #fbf9f9;
 }
 .dark body, .dark html {
-  background: #181c24;
+  background: #241818;
 }
 .app-content {
-  color: #1e293b;
+  color: #3b1e1e;
 }
 .dark .app-content {
-  color: #f1f5f9;
+  color: #f9f1f1;
 }
 /* Mobile menu panel styles */
 .menu-panel {
-  background: #fff;
-  border-bottom: 1px solid #e2e8f0;
-  color: #1e293b;
-  box-shadow: 0 2px 8px rgba(30,41,59,0.06);
+  background: #ffffff;
+  border-bottom: 1px solid #f0e2e2;
+  color: #3b1e1e;
+  box-shadow: 0 2px 8px rgba(59, 30, 30, 0.06);
 }
 .dark .menu-panel {
-  background: #23293a;
-  border-bottom: 1px solid #222a3a;
+  background: #3a2323;
+  border-bottom: 1px solid #3a2222;
   color: #f1f5f9;
 }
 .menu-panel a {
@@ -42,35 +42,35 @@ body, html {
   transition: background 0.2s;
 }
 .menu-panel a:hover {
-  background: #f1f5f9;
+  background: #f9f1f1;
 }
 .dark .menu-panel a:hover {
-  background: #334155;
+  background: #553333;
 }
-/* header */
+/* --- Header --- */
 header {
-  background: #fff;
-  border-bottom: 1px solid #e2e8f0;
-  color: #334155;
+  background: #ffffff;
+  border-bottom: 1px solid #f0e2e2;
+  color: #553333;
   transition: background 0.3s;
 }
 .dark header {
-  background: #23293a;
-  border-bottom: 1px solid #222a3a;
-  color: #f1f5f9;
+  background: #3a2323;
+  border-bottom: 1px solid #3a2222;
+  color: #f9f1f1;
 }
 
-/* navbar */
+/* nav */
 nav a {
-  color: #d10d0d;
+  color: #553333;
   transition: color 0.2s;
 }
 nav a:hover, nav a[aria-current="page"] {
-  color: #540909;
+  color: #eb2525;
   font-weight: 600;
 }
 .dark nav a {
-  color: #cbd5e1;
+  color: #e1cbcb;
 }
 .dark nav a:hover, .dark nav a[aria-current="page"] {
   color: #f83838;
@@ -78,84 +78,84 @@ nav a:hover, nav a[aria-current="page"] {
 
 /* footer */
 footer {
-  background: #fff;
-  border-top: 1px solid #e2e8f0;
-  color: #334155;
+  background: #ffffff;
+  border-top: 1px solid #f0e2e2;
+  color: #553333;
   padding: 1rem;
 }
 .dark footer {
-  background: #23293a;
-  border-top: 1px solid #222a3a;
-  color: #cbd5e1;
+  background: #3a2323;
+  border-top: 1px solid #3a2222;
+  color: #e1cbcb;
 }
 
 /* buttons */
 button, input[type="button"], input[type="submit"] {
-  background: #2563eb;
-  color: #fff;
+  background: #eb2525;
+  color: #ffffff;
   border-radius: 0.5rem;
   padding: 0.5rem 1.2rem;
   border: none;
-  box-shadow: 0 1px 2px rgba(50,60,70,0.06);
+  box-shadow: 0 1px 2px rgba(70, 50, 50, 0.06);
   font-weight: 500;
   transition: background 0.16s;
 }
 button:hover, input[type="button"]:hover {
-  background: #1d4ed8;
+  background: #d81d1d;
 }
 button:focus, input[type="button"]:focus {
-  outline: 2px solid #38bdf8;
+  outline: 2px solid #f83838;
   outline-offset: 2px;
 }
 .dark button, .dark input[type="button"], .dark input[type="submit"] {
-  background: #2563eb;
-  color: #f1f5f9;
+  background: #eb2525;
+  color: #f9f1f1;
 }
 .dark button:hover {
-  background: #60a5fa;
+  background: #fa6060;
 }
 
 /* inputs & textareas */
 input[type="text"], textarea {
-  background: #f3f4f6;
-  border: 1px solid #cbd5e1;
+  background: #f6f3f3;
+  border: 1px solid #e1cbcb;
   border-radius: 0.375rem;
-  color: #1e293b;
+  color: #3b1e1e;
   padding: 0.5rem 0.8rem;
   transition: border 0.2s, background 0.2s;
 }
 input[type="text"]:focus, textarea:focus {
-  border-color: #2563eb;
+  border-color: #eb2525;
   outline: none;
 }
 .dark input[type="text"], .dark textarea {
-  background: #242b37;
-  color: #f1f5f9;
-  border: 1px solid #334155;
+  background: #372424;
+  color: #f9f1f1;
+  border: 1px solid #553333;
 }
 .dark input[type="text"]:focus, .dark textarea:focus {
-  border-color: #60a5fa;
+  border-color: #fa6060;
 }
 
-/* tabs & content boxes --- */
+/* tabs & content boxes */
 .border, .tab-pane {
-  border: 1.5px solid #cbd5e1;
-  background: #fff;
+  border: 1.5px solid #e1cbcb;
+  background: #ffffff;
   border-radius: 0.5rem;
-  color: #1e293b;
+  color: #3b1e1e;
   box-shadow: 0 1px 2px rgba(50,60,70,0.04);
 }
 .dark .border, .dark .tab-pane {
-  border: 1.5px solid #334155;
-  background: #23293a;
-  color: #f1f5f9;
-  box-shadow: 0 1px 2px rgba(10,20,40,0.16);
+  border: 1.5px solid #553333;
+  background: #3a2323;
+  color: #f9f1f1;
+  box-shadow: 0 1px 2px rgba(40, 10, 10, 0.16);
 }
 
 /* scrollbar for dark mode */
 .dark ::-webkit-scrollbar {
-  background: #23293a;
+  background: #3a2323;
 }
 .dark ::-webkit-scrollbar-thumb {
-  background: #334155;
+  background: #553333;
 }
