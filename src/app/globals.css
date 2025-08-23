@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 
-/* --- general layout --- */
+/* general Layout */
 html, body {
   min-height: 100vh;
 }
@@ -10,11 +10,14 @@ body, html {
   background: #fbf9f9;
   font-family: "Inter", sans-serif;
 }
+.texty{ 
+  color: #111; 
+}
 .dark .texty{
   color: #fbf9f9;
 }
 .dark body, .dark html {
-  background: #241818;
+  background: #000000;
 }
 .app-content {
   color: #3b1e1e;
@@ -22,16 +25,16 @@ body, html {
 .dark .app-content {
   color: #f9f1f1;
 }
-/* Mobile menu panel styles */
+/* mobile menu panel styles */
 .menu-panel {
   background: #ffffff;
-  border-bottom: 1px solid #f0e2e2;
-  color: #3b1e1e;
-  box-shadow: 0 2px 8px rgba(59, 30, 30, 0.06);
+  border-bottom: 1px solid #ffffff;
+  color: #ff0000;
+  box-shadow: 0 2px 8px rgba(255, 0, 0, 0.06);
 }
 .dark .menu-panel {
-  background: #3a2323;
-  border-bottom: 1px solid #3a2222;
+  background: #ff0000;
+  border-bottom: 1px solid #ff0000;
   color: #f1f5f9;
 }
 .menu-panel a {
@@ -154,8 +157,8 @@ input[type="text"]:focus, textarea:focus {
 
 /* scrollbar for dark mode */
 .dark ::-webkit-scrollbar {
-  background: #3a2323;
+  background: #23293a;
 }
 .dark ::-webkit-scrollbar-thumb {
-  background: #553333;
+  background: #334155;
 }
