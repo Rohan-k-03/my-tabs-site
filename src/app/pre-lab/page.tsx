@@ -3,11 +3,18 @@ import React from "react";
 import { motion, Variants } from "framer-motion";
 
 const preLabQuestions = [
-  "What is HTML5?",
-  "Explain the difference between let, var, and const in JavaScript.",
-  "Describe the box model in CSS.",
-  "What are semantic HTML elements?",
-  "Explain event bubbling and capturing.",
+  "Did you scaffold with create-next-app (TypeScript, App Router)?",
+  "Can you run the site locally and see Home/About/Escape-Room/Coding-Races/Court-Room? (Yes/No)",
+  "Do you have a Header with a menu (hamburger/kebab on mobile)? (Yes/No)",
+  "Is Dark/Light theme implemented site-wide? (Yes/No)",
+  "Does the Footer show your name, student number, date? (Yes/No)",
+  "Can you navigate all pages with keyboard only?",
+  "Does the site remember the last menu/tab you were on (cookie/localStorage)? Briefly how?",
+  "Does About include your name, student number, and a short how-to video?",
+  "On Home, does your app output copyable HTML5 + JS with inline CSS (no classes)? (Yes/No; paste a tiny snippet)",
+  "Are Escape Room / Coding Races / Court Room present (OK if empty placeholders)? (Yes/No)",
+  "Do you have GitHub commits (screenshots later for submission)? (Yes/No)",
+  "Can you provide the code ZIP (without node_modules) and a short walkthrough video? (Yes/No)",
 ];
 
 const containerVariants: Variants = {
