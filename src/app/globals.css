@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 
-/* --- General Layout --- */
+/* general layout */
 html, body {
   min-height: 100vh;
 }
@@ -47,7 +47,7 @@ body, html {
 .dark .menu-panel a:hover {
   background: #334155;
 }
-/* --- Header --- */
+/* header */
 header {
   background: #fff;
   border-bottom: 1px solid #e2e8f0;
@@ -60,23 +60,23 @@ header {
   color: #f1f5f9;
 }
 
-/* --- Navbar --- */
+/* navbar */
 nav a {
-  color: #334155;
+  color: #d10d0d;
   transition: color 0.2s;
 }
 nav a:hover, nav a[aria-current="page"] {
-  color: #2563eb;
+  color: #540909;
   font-weight: 600;
 }
 .dark nav a {
   color: #cbd5e1;
 }
 .dark nav a:hover, .dark nav a[aria-current="page"] {
-  color: #38bdf8;
+  color: #f83838;
 }
 
-/* --- Footer --- */
+/* footer */
 footer {
   background: #fff;
   border-top: 1px solid #e2e8f0;
@@ -89,7 +89,7 @@ footer {
   color: #cbd5e1;
 }
 
-/* --- Buttons --- */
+/* buttons */
 button, input[type="button"], input[type="submit"] {
   background: #2563eb;
   color: #fff;
@@ -115,7 +115,7 @@ button:focus, input[type="button"]:focus {
   background: #60a5fa;
 }
 
-/* --- Inputs & Textareas --- */
+/* inputs & textareas */
 input[type="text"], textarea {
   background: #f3f4f6;
   border: 1px solid #cbd5e1;
@@ -137,7 +137,7 @@ input[type="text"]:focus, textarea:focus {
   border-color: #60a5fa;
 }
 
-/* --- Tabs & Content Boxes --- */
+/* tabs & content boxes --- */
 .border, .tab-pane {
   border: 1.5px solid #cbd5e1;
   background: #fff;
@@ -152,7 +152,7 @@ input[type="text"]:focus, textarea:focus {
   box-shadow: 0 1px 2px rgba(10,20,40,0.16);
 }
 
-/* --- Scrollbar for dark mode --- */
+/* scrollbar for dark mode */
 .dark ::-webkit-scrollbar {
   background: #23293a;
 }
