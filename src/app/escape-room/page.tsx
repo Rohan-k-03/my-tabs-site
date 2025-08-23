@@ -3,11 +3,7 @@ import React from "react";
 import { motion, Variants } from "framer-motion";
 
 const escapeRoomTasks = [
-  "Find the hidden key in the code snippet.",
-  "Decode the encrypted message.",
-  "Solve the JavaScript puzzle.",
-  "Unlock the CSS secret door.",
-  "Complete the maze of functions.",
+Coming soon...
 ];
 
 const containerVariants: Variants = {
