@@ -3,7 +3,7 @@ import React from "react";
 import { motion, Variants } from "framer-motion";
 
 const courtTasks = [
-"Comming soon..."
+  "Coming soon...",
 ];
 
 const containerVariants: Variants = {
