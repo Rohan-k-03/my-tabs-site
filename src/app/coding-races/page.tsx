@@ -3,11 +3,7 @@ import React from "react";
 import { motion, Variants } from "framer-motion";
 
 const races = [
-  "100m JavaScript Sprint",
-  "CSS Styling Marathon",
-  "Algorithm Challenge 5K",
-  "React Relay Race",
-  "Debugging Decathlon",
+Comming soon...
 ];
 
 const containerVariants: Variants = {
