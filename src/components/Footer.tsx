@@ -9,11 +9,11 @@ const Footer = () => {
     month: "short",
     year: "numeric",
   });
-  const studentInfo = "Rohan Khurana, 21358295";
+  const studentInfo = "© Rohan Khurana, 21358295";
 
   useEffect(() => {
     let currentIndex = 0;
-    const fullText = `${dateString} ${studentInfo}`;
+    const fullText = `${studentInfo} - ${dateString}`;
     const timer = setInterval(() => {
       currentIndex++;
       setDisplayedText(fullText.slice(0, currentIndex));
