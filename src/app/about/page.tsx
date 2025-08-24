@@ -175,20 +175,21 @@ const About: React.FC = () => {
         </motion.p>
 
         <motion.div
-          variants={itemVariants}
-          className="video-container mb-12 max-w-3xl overflow-hidden rounded-lg shadow-lg"
-          style={{ aspectRatio: "16 / 9" }}
-          aria-label="About Video"
-        >
-          <iframe
-            className="w-full h-full"
-            src="https://youtu.be/kOAy0Scivuw"
-            title="About Video"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          />
-        </motion.div>
+  variants={itemVariants}
+  className="video-container mb-12 max-w-3xl overflow-hidden rounded-lg shadow-lg"
+  style={{ aspectRatio: "16 / 9" }}
+  aria-label="About Video"
+>
+  <iframe
+    className="w-full h-full"
+    src="https://www.youtube.com/embed/XTvJ7_JTiGM?rel=0&modestbranding=1"
+    title="Walkthrough video"
+    frameBorder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    referrerPolicy="strict-origin-when-cross-origin"
+    allowFullScreen
+  />
+</motion.div>
       </div>
     </motion.div>
   );
