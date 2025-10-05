@@ -228,7 +228,7 @@ ${scriptBlock}
       initial="hidden"
       animate="visible"
       variants={containerVariants}
-      className="min-h-screen flex flex-col p-4 md:p-6 pt-6 md:pt-8 text-gray-900 dark:bg-gray-900 dark:text-white transition-colors duration-200 pb-20"
+      className="min-h-screen flex flex-col p-4 md:p-6 pt-6 md:pt-8 text-gray-900 dark:bg-transparent dark:text-white transition-colors duration-200 pb-20 mx-auto w-full max-w-6xl"
     >
       <motion.h1
         variants={itemVariants}

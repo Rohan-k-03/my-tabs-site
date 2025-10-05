@@ -27,11 +27,13 @@ const Footer = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
-      className="fixed bottom-0 left-0 right-0 z-40 border-t border-gray-800 bg-white p-4 text-center text-black dark:border-gray-200 dark:bg-gray-900 dark:text-white"
+      className="fixed bottom-0 left-0 right-0 z-40 border-t p-3 text-center text-black dark:text-white"
       style={{ fontWeight: 500, letterSpacing: "0.04em" }}
       aria-label="Footer information"
     >
-      {displayedText}
+      <span className="inline-flex items-center justify-center rounded-md px-2 py-1 text-sm text-black/80 dark:text-gray-200">
+        {displayedText}
+      </span>
     </motion.footer>
   );
 };

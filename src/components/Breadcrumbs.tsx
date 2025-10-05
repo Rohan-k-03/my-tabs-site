@@ -10,7 +10,7 @@ const Breadcrumbs: React.FC = () => {
 
   return (
     <nav className="mb-4 px-4 pt-16 text-sm text-gray-600 dark:text-gray-400">
-      <ol className="flex list-reset space-x-2">
+      <ol className="mx-auto flex w-full max-w-6xl list-reset space-x-2">
         <li>
           <Link href="/" className="hover:underline">
             Home

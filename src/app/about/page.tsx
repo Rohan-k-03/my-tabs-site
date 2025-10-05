@@ -81,7 +81,7 @@ const About: React.FC = () => {
       variants={containerVariants}
       className="app-content min-h-screen bg-inherit p-6 pt-20 font-sans flex justify-center"
     >
-      <div className="w-full max-w-4xl">
+      <div className="w-full max-w-4xl mx-auto">
         <motion.h1
           variants={itemVariants}
           className="texty mb-6 text-4xl font-semibold tracking-tight text-gray-900 dark:text-white"

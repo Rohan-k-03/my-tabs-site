@@ -42,7 +42,7 @@ const itemVariants: Variants = {
 
 const PreLab: React.FC = () => (
   <motion.div
-    className="app-content min-h-screen p-6 pt-20 bg-inherit font-sans"
+    className="app-content min-h-screen p-6 pt-20 bg-inherit font-sans mx-auto w-full max-w-6xl"
     initial="hidden"
     animate="visible"
     variants={containerVariants}
