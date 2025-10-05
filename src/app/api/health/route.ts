@@ -5,3 +5,4 @@ export async function GET() {
   return NextResponse.json({ status: "ok", uptime, now: new Date().toISOString() });
 }
 
+export const runtime = "nodejs";

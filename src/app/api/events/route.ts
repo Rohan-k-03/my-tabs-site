@@ -18,3 +18,7 @@ export async function POST(req: Request) {
   EVENTS.push({ id: nextId++, createdAt: new Date().toISOString(), type, payload });
   return NextResponse.json({ ok: true });
 }
+
+// Ensure this runs on the Node.js runtime and is never statically optimized.
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
