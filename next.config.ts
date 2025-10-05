@@ -4,7 +4,8 @@ const nextConfig: NextConfig = {
   // Keep CI builds green while we iterate; tighten later.
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
-  experimental: { instrumentationHook: true },
+  // Disable the legacy experimental flag; instrumentation.ts works without it now
+  experimental: {},
 };
 
 export default nextConfig;
