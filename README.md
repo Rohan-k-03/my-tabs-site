@@ -1,127 +1,102 @@
-# Custom Tab Generator Website
+# Custom Tab Generator
 
-This project is a Next.js (v15.5.0) + TypeScript + TailwindCSS web application that provides a custom tab generator tool with live preview and exportable accessible markup. It includes an About page, Escape Room, and Coding Races placeholder pages.
+A small Next.js + TypeScript app I built to generate accessible tabs with a live preview and a one‑file HTML export. The site also includes a short About page and a few coursework playgrounds (Escape Room, Coding Races, Court Room).
 
 ---
 
 ## Features
 
-- **Custom Tabs Generator:**  
-    - Create and customize tab labels and contents dynamically.  
-    - Live preview with full keyboard navigation support.  
-    - Generates standalone, accessible HTML5+JS markup with inline CSS (no CSS classes), ready for copy-paste use.
-
-- **Dark/Light Theme:**  
-    - Toggle theme manually; preference persists using `localStorage`.
-
-- **Responsive Header:**  
-    - Hamburger/kebab menu for navigation on small screens.  
-    - Student ID displayed fixed top-left on every page.
-
-- **Footer:**  
-    - Copyright notice with full date, student name, and ID.
-
-- **Accessibility:**  
-    - Tab interface uses proper ARIA roles and supports keyboard navigation.  
-    - Exported markup follows accessibility best practices.
-
-- **Cookies:**  
-    - Remembers selected navigation tab and active tab in the generator.  
-    - Breadcrumbs component beneath the header for navigation context.
-
-- **Pages Included:**  
-    - Home (Tabs Generator)  
-    - About (with embedded walkthrough video)  
-    - Escape Room (placeholder)  
-    - Coding Races (placeholder)
+- Tabs generator with keyboard support (ARIA roles, focus management)
+- One‑click export to a standalone HTML file (inline CSS + JS; save as `Hello.html`)
+- Light/dark theme toggle (saved in `localStorage`)
+- Simple, responsive header with a mobile menu
+- Footer shows name, student number and date
+- Remembers the last visited menu and active tab
 
 ---
 
 ## Getting Started
 
-### Prerequisites
+Prerequisites: a recent Node.js LTS and npm.
 
-- [Node.js](https://nodejs.org/) (latest LTS recommended)
-- npm or yarn
+1) Install dependencies
 
-### Installation
+```bash
+npm install
+```
 
-1. **Clone the repository:**
-     ```bash
-     git clone <repo-url>
-     cd <repo-folder>
-     ```
+2) Start the dev server
 
-2. **Install dependencies:**
-     ```bash
-     npm install
-     # or
-     yarn install
-     ```
+```bash
+npm run dev
+```
 
-3. **Run the development server:**
-     ```bash
-     npm run dev
-     # or
-     yarn dev
-     ```
+Then open http://localhost:3000
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser.
+### Database setup
+
+If you need persistence for saved outputs or Court Room events, run:
+
+```bash
+npm run prisma:migrate -- --name init
+npm run prisma:generate
+```
+
+This creates the local SQLite database at `./dev.db` and generates the Prisma client.
+
+### Tests
+
+```bash
+npm test
+```
+
+Runs two tab-markup regression tests using Node's built-in test runner.
+
+### Docker
+
+Build and run the production image locally:
+
+```bash
+docker build -t tab-generator .
+docker run -p 3000:3000 tab-generator
+```
 
 ---
 
 ## Scripts
 
-- `npm run dev` – Start the development server.
-- `npm run build` – Build the project for production.
-- `npm start` – Start the production server.
-- `npm run lint` – Run ESLint for code quality checks.
-
-*(Replace `npm` with `yarn` if using Yarn.)*
+- `npm run dev` – run the app in development
+- `npm run build` – build for production
+- `npm start` – run the production build
+- `npm run lint` – lint the code
 
 ---
 
-## Project Structure Highlights
+## Project Layout
 
-- `src/components/` – Shared React components (Header, Footer, Layout, Breadcrumbs).
-- `src/pages/` – Next.js pages (`index.tsx` for home, `about.tsx`, placeholders for others).
-- `src/styles/globals.css` – Tailwind imports and global styles (including dark mode).
-- `tailwind.config.js` – Tailwind configuration (dark mode enabled via `class` strategy).
-
----
-
-## Accessibility Notes
-
-- Uses ARIA roles (`tablist`, `tab`, `tabpanel`) in tabs and exported markup.
-- Keyboard navigation: arrow keys, Home, End.
-- Focus management for active tabs; accessible to screen readers.
+- `src/app/` – App Router pages (home, about, extras)
+- `src/components/` – Header, Footer, Layout, Breadcrumbs
+- `src/app/globals.css` – global styles; Tailwind via `@import "tailwindcss"`
+- `public/` – icons and images
 
 ---
 
-## How to Use the Tab Generator
+## Accessibility
 
-1. Add tabs using the **Add Another Tab** button.
-2. Edit tab labels and content in the input fields.
-3. Switch between tabs in the preview or generated markup using keyboard or mouse.
-4. Generate standalone HTML markup with the **Generate Markup** button.
-5. Copy markup to clipboard with the **Copy Code** button for use in your projects.
+- `tablist` / `tab` / `tabpanel` roles and keyboard navigation
+- Arrow keys, Home, End to move focus
+- Exported HTML keeps the same behavior without external CSS
 
 ---
 
 ## Credits
 
-**Developer:** Rohan Khurana  
-**Student ID:** 21358295  
-**Date:** August 2025
-
-Some parts of this project, particularly for troubleshooting errors and optimizing code, were assisted by AI tools such as ChatGPT and GitHub Copilot. These tools were used sparingly and responsibly to improve development efficiency.
+Developer: Rohan Khurana (21358295) – August 2025
 
 ---
 
 ## License
 
-This project is provided as-is for educational and demonstration purposes.
+Provided as‑is for educational use.
 
----
-
-If you encounter any issues or have suggestions, please open an issue or contact the maintainer.
+If something is unclear or broken, please open an issue.

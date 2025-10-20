@@ -2,3 +2,6 @@
 /.next/
 .DS_Store
 .env*
+
+dev.db
+*.db

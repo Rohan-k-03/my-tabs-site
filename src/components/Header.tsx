@@ -6,8 +6,8 @@ import { motion, AnimatePresence, easeOut, Variants } from "framer-motion";
 
 const NAV_ITEMS = [
   { label: "Tabs", path: "/" },
-  { label: "Pre-lab Questions", path: "/pre-lab" },
-  { label: "Escape Room", path: "/escape" },
+  { label: "Pre‑Lab", path: "/pre-lab" },
+  { label: "Escape Room", path: "/escape-room" },
   { label: "Coding Races", path: "/coding-races" },
   { label: "Court Room", path: "/court-room" },
   { label: "About", path: "/about" },
@@ -32,7 +32,7 @@ const navItemVariants: Variants = {
   }),
   hover: {
     scale: 1.05,
-    color: "#2563eb",
+    color: "#d97706",
     transition: { type: "spring", stiffness: 300 },
   },
   tap: { scale: 0.95 },
@@ -41,24 +41,16 @@ const navItemVariants: Variants = {
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activePath, setActivePath] = useState<string>("/");
-  const [displayedId, setDisplayedId] = useState("");
-  const [darkMode, setDarkMode] = useState(false);
   const STUDENT_ID = "21358295";
+  const displayedId = STUDENT_ID; // static display (no typing effect)
+  const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {
     const saved = Cookies.get("selectedNav");
     if (saved) setActivePath(saved);
   }, []);
 
-  useEffect(() => {
-    let currentIndex = 0;
-    const interval = setInterval(() => {
-      currentIndex++;
-      setDisplayedId(STUDENT_ID.slice(0, currentIndex));
-      if (currentIndex === STUDENT_ID.length) clearInterval(interval);
-    }, 150);
-    return () => clearInterval(interval);
-  }, []);
+  // Student ID shows instantly (no animation)
 
   // Theme setup and toggle
   useEffect(() => {
@@ -108,10 +100,26 @@ const Header: React.FC = () => {
     >
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-3">
         <div className="flex items-center gap-4 min-w-0">
-          <span className="inline-flex items-center gap-1 rounded bg-gray-200/80 backdrop-blur px-2.5 py-1.5 font-medium text-sm text-gray-800 dark:bg-gray-800/70 dark:text-gray-200 select-none border border-gray-300/50 dark:border-gray-700/50 shadow-sm">
-            Student ID: {displayedId}
-            <span className="blinking-cursor">|</span>
-          </span>
+          <motion.div
+            variants={navItemVariants}
+            initial="hidden"
+            animate="visible"
+            whileHover="hover"
+            whileTap="tap"
+          >
+            <Link
+              href="/"
+              aria-label="Go to Home via Student ID"
+              onClick={() => handleNavClick("/")}
+              className={`id-chip inline-flex items-center gap-1 rounded bg-gray-200/80 backdrop-blur px-2.5 py-1.5 font-medium text-sm text-gray-700 dark:bg-gray-800/70 dark:text-gray-200 border border-gray-300/50 dark:border-gray-700/50 shadow-sm transition-colors focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-gray-900 hover:underline underline-offset-4 ${
+                activePath === "/"
+                  ? "font-semibold text-amber-700 dark:text-amber-400 underline decoration-2 underline-offset-4"
+                  : ""
+              }`}
+            >
+              Student ID: {displayedId}
+            </Link>
+          </motion.div>
 
           <nav
             className="hidden space-x-6 md:flex"
@@ -132,9 +140,9 @@ const Header: React.FC = () => {
                   href={path}
                   aria-current={activePath === path ? "page" : undefined}
                   onClick={() => handleNavClick(path)}
-                  className={`rounded-md px-3 py-2 transition focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-gray-900 ${
+                  className={`rounded-md px-3 py-2 transition focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-gray-900 ${
                     activePath === path
-                      ? "font-semibold text-indigo-600 dark:text-indigo-400 underline decoration-2 underline-offset-4"
+                      ? "font-semibold text-amber-700 dark:text-amber-400 underline decoration-2 underline-offset-4"
                       : "hover:underline underline-offset-4"
                   }`}
                 >
@@ -152,7 +160,7 @@ const Header: React.FC = () => {
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
-            className="hidden md:inline-flex rounded-full bg-gray-200/80 backdrop-blur p-2 shadow text-lg text-gray-700 dark:bg-gray-700/70 dark:text-gray-200 border border-blue-200/60 dark:border-blue-900/40"
+            className="hidden md:inline-flex rounded-full bg-gray-200/80 backdrop-blur p-2 shadow text-lg text-gray-700 dark:bg-gray-700/70 dark:text-gray-200 border border-amber-200/60 dark:border-amber-900/40"
           >
             {darkMode ? "🌙" : "☀️"}
           </motion.button>
@@ -210,13 +218,20 @@ const Header: React.FC = () => {
             <ul className="mx-auto flex w-full max-w-6xl flex-col space-y-3 p-4">
               <li className="pb-2 mb-1 border-b border-gray-200/60 dark:border-gray-700/60">
                 <div className="flex items-center justify-between">
-                  <span className="inline-flex items-center gap-1 rounded bg-gray-200/70 px-2 py-1 text-xs text-gray-800 dark:bg-gray-800/70 dark:text-gray-200">
+                  <Link
+                    href="/"
+                    aria-label="Go to Home via Student ID"
+                    onClick={() => handleNavClick("/")}
+                    className={`id-chip inline-flex items-center gap-1 rounded bg-gray-200/70 px-2 py-1 text-xs text-gray-700 dark:bg-gray-800/70 dark:text-gray-200 border border-gray-300/50 dark:border-gray-700/50 transition-colors focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-gray-900 hover:underline underline-offset-4 ${
+                      activePath === "/" ? "font-bold underline text-amber-700 dark:text-amber-400" : ""
+                    }`}
+                  >
                     Student ID: {displayedId}
-                  </span>
+                  </Link>
                   <button
                     aria-label="Toggle Dark Mode"
                     onClick={toggleDarkMode}
-                    className="rounded-full bg-gray-200/80 p-2 text-base text-gray-700 dark:bg-gray-700/70 dark:text-gray-200 border border-blue-200/60 dark:border-blue-900/40"
+                    className="rounded-full bg-gray-200/80 p-2 text-base text-gray-700 dark:bg-gray-700/70 dark:text-gray-200 border border-amber-200/60 dark:border-amber-900/40"
                   >
                     {darkMode ? "🌙" : "☀️"}
                   </button>
@@ -230,9 +245,9 @@ const Header: React.FC = () => {
                     role="menuitem"
                     tabIndex={0}
                     onClick={() => handleNavClick(path)}
-                    className={`block rounded-md px-3 py-2 transition focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-gray-900 ${
+                    className={`block rounded-md px-3 py-2 transition focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-gray-900 ${
                       activePath === path
-                        ? "font-bold underline text-blue-600 dark:text-blue-400"
+                        ? "font-bold underline text-amber-700 dark:text-amber-400"
                         : "hover:underline text-gray-700 dark:text-gray-300"
                     }`}
                   >
@@ -245,26 +260,7 @@ const Header: React.FC = () => {
         )}
       </AnimatePresence>
 
-      <style jsx>{`
-        .blinking-cursor {
-          font-weight: 100;
-          font-size: 18px;
-          color: #333;
-          animation: blink 1s infinite;
-          margin-left: 2px;
-        }
-        @keyframes blink {
-          0% {
-            opacity: 1;
-          }
-          50% {
-            opacity: 0;
-          }
-          100% {
-            opacity: 1;
-          }
-        }
-      `}</style>
+      {/* No extra styles needed for Student ID */}
     </motion.header>
   );
 };

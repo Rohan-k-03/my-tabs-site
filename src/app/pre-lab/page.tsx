@@ -3,18 +3,18 @@ import React from "react";
 import { motion, Variants } from "framer-motion";
 
 const preLabQuestions = [
-  "Did you scaffold with create-next-app (TypeScript, App Router)?",
-  "Can you run the site locally and see Home/About/Escape-Room/Coding-Races/Court-Room? (Yes/No)",
-  "Do you have a Header with a menu (hamburger/kebab on mobile)? (Yes/No)",
-  "Is Dark/Light theme implemented site-wide? (Yes/No)",
-  "Does the Footer show your name, student number, date? (Yes/No)",
-  "Can you navigate all pages with keyboard only?",
-  "Does the site remember the last menu/tab you were on (cookie/localStorage)? Briefly how?",
-  "Does About include your name, student number, and a short how-to video?",
-  "On Home, does your app output copyable HTML5 + JS with inline CSS (no classes)? (Yes/No; paste a tiny snippet)",
-  "Are Escape Room / Coding Races / Court Room present (OK if empty placeholders)? (Yes/No)",
-  "Do you have GitHub commits (screenshots later for submission)? (Yes/No)",
-  "Can you provide the code ZIP (without node_modules) and a short walkthrough video? (Yes/No)",
+  "Project created with create-next-app (TypeScript, App Router)",
+  "App runs locally and all pages load (Home, About, Escape Room, Coding Races, Court Room)",
+  "Header includes a responsive menu (hamburger on mobile)",
+  "Light/dark theme works across the site",
+  "Footer shows name, student number and date",
+  "Keyboard-only navigation works throughout",
+  "Site remembers the last menu and active tab (cookie/localStorage)",
+  "About page includes name, student number and a short how‑to video",
+  "Home page can export a single HTML file (inline CSS + JS)",
+  "Escape Room / Coding Races / Court Room pages are present (placeholders are fine)",
+  "Repository has regular commits",
+  "Can provide a ZIP (without node_modules) and a short walkthrough video",
 ];
 
 const containerVariants: Variants = {

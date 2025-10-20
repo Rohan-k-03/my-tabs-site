@@ -18,7 +18,7 @@ type Task = {
   status: TaskStatus;
 };
 
-type FeedItem = { ts: number; source: Source; text: string };
+type FeedItem = { ts: number; source: Source; text: string; task?: TaskKey };
 
 const HUMAN_SOURCES: Source[] = ["boss", "family", "agile"];
 
@@ -53,9 +53,9 @@ export default function CourtRoom() {
     } catch {}
   };
 
-  const pushFeed = (source: Source, text: string) => {
-    setFeed((f) => [{ ts: Date.now(), source, text }, ...f].slice(0, 200));
-    logEvent("court_feed", { source, text });
+  const pushFeed = (source: Source, text: string, task?: TaskKey) => {
+    setFeed((f) => [{ ts: Date.now(), source, text, task }, ...f].slice(0, 200));
+    logEvent("court_feed", { source, text, task: task ?? null });
   };
 
   const scheduleNextMessage = () => {
@@ -85,7 +85,7 @@ export default function CourtRoom() {
           });
         }
 
-        pushFeed(source, item.text);
+        pushFeed(source, item.text, item.task);
         scheduleNextMessage();
       }, ms);
     }
@@ -124,7 +124,7 @@ export default function CourtRoom() {
           if (dt >= TWO_MIN && !t.urgentAt) {
             t.urgentAt = now;
             t.status = "urgent";
-            pushFeed("agile", `URGENT: ${t.label}`);
+            pushFeed("agile", `URGENT: ${t.label}`, t.key);
             logEvent("court_urgent", { task: t.key });
           }
           // After 4 minutes -> court if still not fixed
@@ -138,7 +138,7 @@ export default function CourtRoom() {
               : k === "database"
               ? " – hacked; breaking Laws of Tort."
               : ".";
-            pushFeed("system", `COURT: You ignored "${t.label}"${law}`);
+            pushFeed("system", `COURT: "${t.label}" escalated${law}`, t.key);
             logEvent("court_court", { task: t.key, law: t.lawOnFail || null });
           }
         });
@@ -160,7 +160,7 @@ export default function CourtRoom() {
       const t = prev[k];
       if (t.status === "fixed") return prev;
       const updated: Task = { ...t, status: "fixed" };
-      pushFeed("system", `Resolved: ${t.label}`);
+      pushFeed("system", `Resolved: ${t.label}`, t.key);
       logEvent("court_fix", { task: t.key });
       return { ...prev, [k]: updated };
     });
@@ -196,7 +196,7 @@ export default function CourtRoom() {
       <section className="p-6 mx-auto w-full max-w-6xl pt-20">
         <header className="mb-3">
           <h1 className="texty text-3xl font-semibold tracking-tight">Court Room</h1>
-          <p className="text-gray-600 dark:text-gray-400">Fix issues before they escalate to court.</p>
+          <p className="court-tagline">Triage issues and keep them from escalating.</p>
         </header>
 
         {/* Timer */}
@@ -225,7 +225,23 @@ export default function CourtRoom() {
           {/* Tasks panel */}
           <section className="card p-5 md:col-span-2" aria-label="Tasks">
             <h2 className="text-lg font-semibold mb-1">Stages</h2>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">Fix the issues below before they become urgent.</p>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">Resolve items below to avoid escalation.</p>
+            {/* Summary bar */}
+            {(() => {
+              const vals = Object.values(tasks) as Task[];
+              const pending = vals.filter(t => t.status === "pending").length;
+              const urgent = vals.filter(t => t.status === "urgent").length;
+              const court = vals.filter(t => t.status === "court").length;
+              const fixed = vals.filter(t => t.status === "fixed").length;
+              return (
+                <div className="mb-3 flex flex-wrap gap-2 text-xs">
+                  <span className="rounded bg-gray-100 px-2 py-1 text-gray-700 dark:bg-gray-800 dark:text-gray-300">Pending: {pending}</span>
+                  <span className="rounded bg-red-100 px-2 py-1 text-red-700 dark:bg-red-900/40 dark:text-red-200">Urgent: {urgent}</span>
+                  <span className="rounded bg-black px-2 py-1 text-white dark:bg-white dark:text-black">Court: {court}</span>
+                  <span className="rounded bg-green-100 px-2 py-1 text-green-700 dark:bg-green-900/40 dark:text-green-200">Fixed: {fixed}</span>
+                </div>
+              );
+            })()}
             <ul className="space-y-3">
               {(Object.keys(tasks) as TaskKey[]).map((k) => {
                 const t = tasks[k];
@@ -243,7 +259,7 @@ export default function CourtRoom() {
                     </div>
                     <div className="flex items-center gap-2">
                       <button onClick={() => handleFix(k)} disabled={t.status === "fixed" || t.status === "court"}>
-                        {t.status === "fixed" ? "Fixed" : "Fix Now"}
+                        {t.status === "fixed" ? "Fixed" : "Mark fixed"}
                       </button>
                     </div>
                   </li>
@@ -255,16 +271,39 @@ export default function CourtRoom() {
           {/* Feed panel */}
           <section className="card p-5" aria-label="Messages">
             <h2 className="text-lg font-semibold mb-1">Messages</h2>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">Boss, family and agile will ping every 20–30s.</p>
-            <ul className="space-y-2 max-h-80 overflow-auto pr-1">
-              {feed.map((m, i) => (
-                <li key={i} className="rounded border p-2 bg-white/70 dark:bg-slate-900/40">
-                  <div className="text-xs text-gray-500 dark:text-gray-400 mb-0.5">
-                    {new Date(m.ts).toLocaleTimeString()} – {m.source}
-                  </div>
-                  <div className="text-sm">{m.text}</div>
-                </li>
-              ))}
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">Updates arrive every 20–30 seconds.</p>
+            <ul className="space-y-2 max-h-80 overflow-auto pr-1" aria-live="polite" role="log">
+              {feed.map((m, i) => {
+                const icon = m.source === "boss" ? "💼" : m.source === "family" ? "👪" : m.source === "agile" ? "🧭" : "⚙️";
+                const t = m.task ? tasks[m.task] : undefined;
+                const canSnooze = !!(m.task && t && t.status !== "fixed" && t.status !== "court");
+                const onSnooze = () => {
+                  if (!m.task) return;
+                  setTasks(prev => {
+                    const next = { ...prev };
+                    const task = next[m.task!];
+                    if (task && task.status !== "fixed" && task.status !== "court") {
+                      task.firstAt = Date.now();
+                    }
+                    return next;
+                  });
+                  pushFeed("system", `Snoozed: ${t?.label} for 2 minutes`, m.task);
+                  logEvent("court_snooze", { task: m.task });
+                };
+                return (
+                  <li key={i} className="rounded border p-2 bg-white/70 dark:bg-slate-900/40">
+                    <div className="flex items-center justify-between">
+                      <div className="text-xs text-gray-500 dark:text-gray-400 mb-0.5">
+                        {icon} {new Date(m.ts).toLocaleTimeString()} – {m.source}
+                      </div>
+                      {canSnooze && (
+                        <button className="text-xs px-2 py-0.5" onClick={onSnooze} title="Snooze 2m">Snooze</button>
+                      )}
+                    </div>
+                    <div className="text-sm">{m.text}</div>
+                  </li>
+                );
+              })}
             </ul>
           </section>
         </div>
@@ -276,27 +315,27 @@ export default function CourtRoom() {
           <div className="w-full max-w-lg rounded-xl border bg-white p-6 text-gray-900 shadow-2xl dark:border-gray-700 dark:bg-gray-900 dark:text-white">
             <div className="flex items-center gap-3 mb-2">
               <img src="/gavel.svg" alt="gavel" className="h-8 w-8" />
-              <h3 className="text-xl font-semibold">Court Summons</h3>
+              <h3 className="text-xl font-semibold">Escalation Notice</h3>
             </div>
             <p className="text-sm text-gray-700 dark:text-gray-300 mb-4">
-              One or more issues escalated to court due to inaction. Resolve tasks promptly to avoid fines and penalties.
+              One or more issues have escalated due to inaction. Address them to bring the system back to a healthy state.
             </p>
             <ul className="space-y-1 text-sm">
               {(Object.values(tasks).filter((t) => t.status === "court") as Task[]).map((t) => (
                 <li key={t.key}>
                   – {t.label}{" "}
                   {t.lawOnFail
-                    ? `(breaking ${t.lawOnFail})`
+                    ? `(fined for breaking ${t.lawOnFail})`
                     : t.key === "login"
-                    ? "(declared bankruptcy)"
+                    ? "(declared bankruptcy; no one can use your app)"
                     : t.key === "database"
-                    ? "(hacked; laws of tort)"
+                    ? "(hacked; breaking Laws of Tort)"
                     : ""}
                 </li>
               ))}
             </ul>
             <div className="mt-4 flex justify-end">
-              <button onClick={() => window.location.reload()}>Reset Scenario</button>
+              <button onClick={() => window.location.reload()}>Reset scenario</button>
             </div>
           </div>
         </div>

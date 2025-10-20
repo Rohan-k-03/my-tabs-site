@@ -1,5 +1,5 @@
 export async function register() {
-  // Called once on the server when the app starts. Good place to wire basic observers.
+  // Runs once on server start; register lightweight dev observers.
   try {
     // Minimal process listeners for visibility during development
     process.on("uncaughtException", (err) => {
@@ -24,4 +24,3 @@ export function onUnhandledError(err: unknown) {
   // eslint-disable-next-line no-console
   console.error("[instrumentation] onUnhandledError", err);
 }
-

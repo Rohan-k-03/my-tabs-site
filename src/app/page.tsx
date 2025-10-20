@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, easeOut } from "framer-motion";
 import Cookies from "js-cookie";
+import { buildStandaloneMarkup } from "@/lib/tabMarkup";
 
 const TabsGenerator: React.FC = () => {
   const [tabLabels, setTabLabels] = useState<string[]>(["Tab 1", "Tab 2"]);
@@ -69,127 +70,7 @@ const TabsGenerator: React.FC = () => {
     setIsGenerating(true);
 
     setTimeout(() => {
-      const buttonsHTML = tabLabels
-        .map(
-          (label, i) => `
-        <button 
-          id="tab-${i + 1}" 
-          role="tab" 
-          aria-selected="${i === activeTab ? "true" : "false"}" 
-          aria-controls="panel-${i + 1}" 
-          data-role="tab-btn" 
-          tabindex="${i === activeTab ? 0 : -1}" 
-          style="
-            background-color: ${i === activeTab ? "#ddd" : "#f5f5f5"};
-            padding: 10px 16px;
-            border: none;
-            cursor: pointer;
-            border-radius: 6px 6px 0 0;
-            margin-right: 4px;
-            font-weight: ${i === activeTab ? "600" : "400"};
-          "
-          onclick="activateTab('panel-${i + 1}', this)"
-        >
-          ${label}
-        </button>
-      `
-        )
-        .join("");
-
-      const panelsHTML = tabContents
-        .map(
-          (content, i) => `
-        <div 
-          id="panel-${i + 1}" 
-          role="tabpanel" 
-          aria-labelledby="tab-${i + 1}" 
-          tabindex="${i === activeTab ? 0 : -1}"
-          data-role="tab-pane" 
-          style="
-            display: ${i === activeTab ? "block" : "none"};
-            padding: 20px;
-            border: 1px solid #e5e5e5;
-            border-top: none;
-            font-family: Arial, sans-serif;
-            border-radius: 0 0 8px 8px;
-            background: white;
-          "
-        >
-          ${content}
-        </div>
-      `
-        )
-        .join("");
-
-      const scriptBlock = `
-<script>
-(function() {
-  function activateTab(id, clickedBtn) {
-    document.querySelectorAll('[data-role="tab-pane"]').forEach(pan => {
-      pan.style.display = 'none';
-      pan.setAttribute('tabindex', '-1');
-    });
-    document.querySelectorAll('[data-role="tab-btn"]').forEach(btn => {
-      btn.style.backgroundColor = '#f5f5f5';
-      btn.style.fontWeight = '400';
-      btn.setAttribute('aria-selected', 'false');
-      btn.setAttribute('tabindex', '-1');
-    });
-    const panel = document.getElementById(id);
-    panel.style.display = 'block';
-    panel.setAttribute('tabindex', '0');
-    clickedBtn.style.backgroundColor = '#ddd';
-    clickedBtn.style.fontWeight = '600';
-    clickedBtn.setAttribute('aria-selected', 'true');
-    clickedBtn.setAttribute('tabindex', '0');
-    clickedBtn.focus();
-  }
-  window.activateTab = activateTab;
-  document.addEventListener('keydown', function(e) {
-    const focused = document.activeElement;
-    if (!focused) return;
-    if (focused.getAttribute('data-role') !== 'tab-btn') return;
-    const tabs = Array.from(document.querySelectorAll('[data-role="tab-btn"]'));
-    let index = tabs.indexOf(focused);
-    if (index === -1) return;
-    switch(e.key) {
-      case 'ArrowRight':
-        e.preventDefault();
-        index = (index + 1) % tabs.length;
-        tabs[index].click();
-        tabs[index].focus();
-        break;
-      case 'ArrowLeft':
-        e.preventDefault();
-        index = (index - 1 + tabs.length) % tabs.length;
-        tabs[index].click();
-        tabs[index].focus();
-        break;
-      case 'Home':
-        e.preventDefault();
-        tabs[0].click();
-        tabs[0].focus();
-        break;
-      case 'End':
-        e.preventDefault();
-        tabs[tabs.length - 1].click();
-        tabs[tabs.length - 1].focus();
-        break;
-    }
-  });
-})();
-</script>
-`.trim();
-
-      const finalOutput = `
-<div style="font-family: Arial, sans-serif; max-width: 800px; margin: 20px auto;">
-  <div role="tablist" style="border-bottom: 1px solid #e5e5e5;">
-    ${buttonsHTML}
-  </div>
-  ${panelsHTML}
-</div>
-${scriptBlock}
-`.trim();
+      const finalOutput = buildStandaloneMarkup(tabLabels, tabContents, activeTab);
 
       setGeneratedMarkup(finalOutput);
       setCopied(false);
@@ -296,9 +177,9 @@ ${scriptBlock}
           whileTap={{ scale: 0.95 }}
           onClick={addTab}
           className="rounded-lg bg-blue-600 px-5 py-2.5 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
-          aria-label="Add Another Tab"
+          aria-label="Add tab"
         >
-          Add Another Tab
+          Add tab
         </motion.button>
       </motion.div>
 
@@ -399,9 +280,9 @@ ${scriptBlock}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setShowMarkup(s => !s)}
                 className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-800 hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 sm:w-auto transition-colors"
-                aria-label={showMarkup ? "Hide Markup" : "Show Markup"}
+                aria-label={showMarkup ? "Hide HTML" : "Show HTML"}
               >
-                {showMarkup ? "Hide Markup" : "Show Markup"}
+                {showMarkup ? "Hide HTML" : "Show HTML"}
               </motion.button>
             )}
           </motion.div>
@@ -422,7 +303,7 @@ ${scriptBlock}
                   htmlFor="generated-code"
                   className="texty text-gray-700 text-sm font-medium dark:text-gray-300"
                 >
-                  Generated Output
+                  Exported HTML
                 </label>
                 <span className="rounded bg-gray-100 px-2 py-1 text-xs text-gray-500 dark:bg-gray-700 dark:text-gray-400">
                   HTML
@@ -451,7 +332,7 @@ ${scriptBlock}
                 type="button"
                 onClick={copyMarkup}
                 className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-gray-800 px-4 py-2.5 text-white hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-500 dark:focus:ring-offset-transparent sm:w-auto"
-                aria-label="Copy code to clipboard"
+                aria-label="Copy HTML to clipboard"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -468,7 +349,7 @@ ${scriptBlock}
                     d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
                   />
                 </svg>
-                {copied ? "Copied to Clipboard!" : "Copy Code"}
+                {copied ? "Copied to clipboard" : "Copy HTML"}
               </motion.button>
             </motion.div>
           )}

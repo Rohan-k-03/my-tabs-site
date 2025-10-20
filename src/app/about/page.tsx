@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, Variants } from "framer-motion";
 
-const TYPE_SPEED = 60; 
+const TYPE_SPEED = 40; 
 
 const About: React.FC = () => {
   const texts = {
@@ -10,10 +10,10 @@ const About: React.FC = () => {
     name: "Name: Rohan Khurana",
     studentId: "Student ID: 21358295",
     description:
-      "This page is part of the HTML5 Tab Generator project for the university assignment.",
+      "This page is part of my HTML5 Tabs Generator assignment. It gives a quick overview and a short walkthrough video.",
     howToUseHeading: "How to Use This Site",
     howToUseText:
-      "This site allows users to generate HTML tabs with code that is fully inline styled for easy sharing and use. Simply navigate to the Code Generator, input your content and customize styles as needed, then copy the generated code. Save the output as an HTML file (for example, Hello.html) and open it in any web browser to view your styled tabs. The intuitive interface helps users create clean, portable HTML snippets quickly without the need for external CSS files.",
+      "Use the generator on the home page to add tab labels and content. When you're ready, export a single self‑contained file and open it in your browser. If you like, save it as Hello.html.",
   };
 
   const [typedHeading, setTypedHeading] = useState("");
@@ -61,7 +61,7 @@ const About: React.FC = () => {
     visible: {
       opacity: 1,
       y: 0,
-      transition: { staggerChildren: 0.3, when: "beforeChildren" },
+      transition: { staggerChildren: 0.2, when: "beforeChildren" },
     },
   };
 
@@ -70,7 +70,7 @@ const About: React.FC = () => {
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.6, ease: "easeOut" },
+      transition: { duration: 0.45, ease: "easeOut" },
     },
   };
 

@@ -31,7 +31,7 @@ const Footer = () => {
       style={{ fontWeight: 500, letterSpacing: "0.04em" }}
       aria-label="Footer information"
     >
-      <span className="inline-flex items-center justify-center rounded-md px-2 py-1 text-sm text-black/80 dark:text-gray-200">
+      <span className="inline-flex items-center justify-center rounded-md px-2 py-1 text-sm text-current">
         {displayedText}
       </span>
     </motion.footer>

@@ -1,16 +1,20 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Keep CI builds green while we iterate; tighten later.
+  // Relax lint/type checks during development; tighten before release.
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
-  // Disable the legacy experimental flag; instrumentation.ts works without it now
+  // Defaults are fine; keep this explicit for clarity.
   experimental: {},
-  // Help Next.js resolve the correct root when multiple lockfiles exist on the machine
-  // and speed up tracing. This also quiets the dev warning you saw.
+  // Ensure file tracing resolves from the project root.
   outputFileTracingRoot: __dirname,
-  // If you ever switch back to Turbopack, uncomment below to force the correct root
+  // If you switch to Turbopack, you may want:
   // turbopack: { root: __dirname },
+  async redirects() {
+    return [
+      { source: "/escape", destination: "/escape-room", permanent: true },
+    ];
+  },
 };
 
 export default nextConfig;

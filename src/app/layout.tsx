@@ -3,8 +3,8 @@ import "./globals.css";
 import ClientLayout from "@/components/Layout"; 
 
 export const metadata: Metadata = {
-  title: "My App",
-  description: "Migrated from Pages Router",
+  title: "Custom Tab Generator",
+  description: "Build accessible tabs and export a single HTML file.",
 };
 
 export default function RootLayout({
