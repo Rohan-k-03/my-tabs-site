@@ -4,13 +4,13 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 
 type Hotspot = {
   id: string;
-  xPct: number; // left % relative to image
-  yPct: number; // top % relative to image
-  wPct: number; // width %
-  hPct: number; // height %
+  xPct: number;
+  yPct: number;
+  wPct: number;
+  hPct: number;
   label: string;
   prompt: string;
-  answers: string[]; // accepted answers (lowercased) for text type
+  answers: string[];
   hint?: string;
   points?: number;
 };
@@ -109,7 +109,7 @@ export default function EscapeBuilderPage() {
         </header>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Canvas */}
+          {/* canvas */}
           <section className="md:col-span-2 card p-3">
             <div className="mb-3 flex items-center gap-2">
               <label className="text-sm">Background URL</label>
@@ -138,7 +138,7 @@ export default function EscapeBuilderPage() {
             )}
           </section>
 
-          {/* Sidebar */}
+          {/* sidebar */}
           <section className="card p-4">
             <h2 className="text-lg font-semibold mb-2">Hotspots</h2>
             <div className="mb-3 flex gap-2">

@@ -12,7 +12,7 @@ type Task = {
   key: TaskKey;
   label: string;
   lawOnFail?: string;
-  firstAt?: number; // ms epoch when first appeared
+  firstAt?: number;
   urgentAt?: number;
   courtAt?: number;
   status: TaskStatus;
@@ -22,7 +22,7 @@ type FeedItem = { ts: number; source: Source; text: string; task?: TaskKey };
 
 const HUMAN_SOURCES: Source[] = ["boss", "family", "agile"];
 
-// 2 minutes escalation window in ms
+
 const TWO_MIN = 2 * 60 * 1000;
 
 export default function CourtRoom() {
@@ -30,8 +30,7 @@ export default function CourtRoom() {
   const [mm, setMm] = useState("00");
   const [ss, setSs] = useState("00");
 
-  // Background decorative layer
-  // Tasks
+
   const [tasks, setTasks] = useState<Record<TaskKey, Task>>({
     alt: { key: "alt", label: "Fix alt in img1", lawOnFail: "Disability Act", status: "pending" },
     validation: { key: "validation", label: "Fix input validation", lawOnFail: "Laws of Tort", status: "pending" },
@@ -59,7 +58,7 @@ export default function CourtRoom() {
   };
 
   const scheduleNextMessage = () => {
-    const ms = 20000 + Math.floor(Math.random() * 10000); // 20–30s
+    const ms = 20000 + Math.floor(Math.random() * 10000);
     if (typeof window !== "undefined") {
       generatorTimeout.current = window.setTimeout(() => {
         const source = HUMAN_SOURCES[Math.floor(Math.random() * HUMAN_SOURCES.length)];
@@ -77,7 +76,7 @@ export default function CourtRoom() {
         if (item.task) {
           setTasks((prev) => {
             const t = prev[item.task!];
-            // if already fixed or in court, still add reminder but don’t change timestamps
+
             if (!t.firstAt && t.status !== "fixed") {
               t.firstAt = Date.now();
             }
@@ -91,12 +90,12 @@ export default function CourtRoom() {
     }
   };
 
-  // Kick off initial messages and scheduling
+
   useEffect(() => {
     pushFeed("boss", "Welcome to the sprint – stay focused.");
     pushFeed("family", "Dinner at 7? Don’t be late.");
     pushFeed("agile", "Standup in 15 minutes – be ready.");
-    // Mark initial appearance for key compliance tasks
+
     setTasks((prev) => ({
       ...prev,
       alt: { ...prev.alt, firstAt: Date.now() },
@@ -106,10 +105,10 @@ export default function CourtRoom() {
     return () => {
       if (generatorTimeout.current) window.clearTimeout(generatorTimeout.current);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, []);
 
-  // Escalation checks
+
   useEffect(() => {
     const tick = () => {
       setTasks((prev) => {
@@ -120,15 +119,15 @@ export default function CourtRoom() {
           if (t.status === "fixed" || t.status === "court") return;
           if (!t.firstAt) return;
           const dt = now - t.firstAt;
-          // After 2 minutes -> urgent
+          
           if (dt >= TWO_MIN && !t.urgentAt) {
             t.urgentAt = now;
             t.status = "urgent";
             pushFeed("agile", `URGENT: ${t.label}`, t.key);
             logEvent("court_urgent", { task: t.key });
           }
-          // After 4 minutes -> court if still not fixed
-          if (dt >= 2 * TWO_MIN && t.status !== "fixed") {
+
+          if (dt >= 2 * TWO_MIN) {
             t.courtAt = now;
             t.status = "court";
             const law = t.lawOnFail
@@ -176,7 +175,7 @@ export default function CourtRoom() {
 
   return (
     <main className="relative pb-24">
-      {/* Background */}
+      {/* background */}
       <section aria-label="Backdrop" className="absolute inset-x-0 top-0 -z-10 h-64">
         <div
           aria-hidden
@@ -199,7 +198,7 @@ export default function CourtRoom() {
           <p className="court-tagline">Triage issues and keep them from escalating.</p>
         </header>
 
-        {/* Timer */}
+        {/* timer */}
         <section aria-label="Timer" className="my-4 flex flex-wrap items-center gap-2">
           <span className="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 bg-white/70 dark:bg-slate-900/50">
             <strong className="text-gray-700 dark:text-gray-200">Timer:</strong>
@@ -222,11 +221,11 @@ export default function CourtRoom() {
         </section>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Tasks panel */}
+          {/* tasks panel */}
           <section className="card p-5 md:col-span-2" aria-label="Tasks">
             <h2 className="text-lg font-semibold mb-1">Stages</h2>
             <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">Resolve items below to avoid escalation.</p>
-            {/* Summary bar */}
+            {/* summary bar */}
             {(() => {
               const vals = Object.values(tasks) as Task[];
               const pending = vals.filter(t => t.status === "pending").length;
@@ -268,7 +267,7 @@ export default function CourtRoom() {
             </ul>
           </section>
 
-          {/* Feed panel */}
+          {/* feed panel */}
           <section className="card p-5" aria-label="Messages">
             <h2 className="text-lg font-semibold mb-1">Messages</h2>
             <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">Updates arrive every 20–30 seconds.</p>
@@ -309,7 +308,7 @@ export default function CourtRoom() {
         </div>
       </section>
 
-      {/* Court overlay */}
+      {/* court overlay */}
       {anyCourt && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
           <div className="w-full max-w-lg rounded-xl border bg-white p-6 text-gray-900 shadow-2xl dark:border-gray-700 dark:bg-gray-900 dark:text-white">

@@ -17,7 +17,7 @@ export default function Layout({ children }: LayoutProps) {
         <Breadcrumbs />
         {children}
       </main>
-      {/* Give space for fixed footer */}
+      {/* space footer */}
       <div className="h-[64px] md:h-[52px]" />
       <Footer />
     </div>

@@ -42,7 +42,7 @@ const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activePath, setActivePath] = useState<string>("/");
   const STUDENT_ID = "21358295";
-  const displayedId = STUDENT_ID; // static display (no typing effect)
+  const displayedId = STUDENT_ID;
   const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {
@@ -50,9 +50,6 @@ const Header: React.FC = () => {
     if (saved) setActivePath(saved);
   }, []);
 
-  // Student ID shows instantly (no animation)
-
-  // Theme setup and toggle
   useEffect(() => {
     const storedTheme = typeof window !== "undefined" ? localStorage.getItem("theme") : null;
     const htmlElement = document.documentElement;
@@ -260,7 +257,7 @@ const Header: React.FC = () => {
         )}
       </AnimatePresence>
 
-      {/* No extra styles needed for Student ID */}
+      {/* std id */}
     </motion.header>
   );
 };

@@ -1,5 +1,5 @@
 /**
- * Build the standalone HTML markup for the tab generator.
+ * standalone html markup for the tab generator
  * @param {string[]} labels
  * @param {string[]} contents
  * @param {number} activeIndex

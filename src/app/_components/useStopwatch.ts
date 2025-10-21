@@ -10,7 +10,7 @@ export type Stopwatch = {
   setElapsed: (ms: number) => void;
 };
 
-// A tiny, SSR-safe stopwatch hook using setInterval(1000)
+// a tiny, SSR-safe stopwatch hook using setInterval(1000)
 export function useStopwatch(): Stopwatch {
   const [elapsedMs, setElapsedMs] = useState(0);
   const isRunningRef = useRef(false);

@@ -24,6 +24,6 @@ export async function DELETE(req: Request) {
   return NextResponse.json({ ok: true });
 }
 
-// Ensure this runs on the Node.js runtime and is never statically optimized.
+// ensure this runs on the node.js runtime n is never statically optimized
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
