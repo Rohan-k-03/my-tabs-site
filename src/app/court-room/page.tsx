@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import Image from "next/image";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import useStopwatch from "@/app/_components/useStopwatch";
 
 type Source = "boss" | "family" | "agile" | "system";
@@ -22,6 +22,7 @@ type FeedItem = { ts: number; source: Source; text: string; task?: TaskKey };
 
 const HUMAN_SOURCES: Source[] = ["boss", "family", "agile"];
 
+type EventPayload = Record<string, unknown>;
 
 const TWO_MIN = 2 * 60 * 1000;
 
@@ -42,7 +43,7 @@ export default function CourtRoom() {
   const generatorTimeout = useRef<number | null>(null);
   const escalateInterval = useRef<number | null>(null);
 
-  const logEvent = async (type: string, payload: any = {}) => {
+  const logEvent = useCallback(async (type: string, payload: EventPayload = {}) => {
     try {
       await fetch("/api/events", {
         method: "POST",
@@ -50,46 +51,52 @@ export default function CourtRoom() {
         body: JSON.stringify({ type, payload }),
       });
     } catch {}
-  };
+  }, []);
 
-  const pushFeed = (source: Source, text: string, task?: TaskKey) => {
-    setFeed((f) => [{ ts: Date.now(), source, text, task }, ...f].slice(0, 200));
-    logEvent("court_feed", { source, text, task: task ?? null });
-  };
+  const pushFeed = useCallback(
+    (source: Source, text: string, task?: TaskKey) => {
+      setFeed((f) => [{ ts: Date.now(), source, text, task }, ...f].slice(0, 200));
+      logEvent("court_feed", { source, text, task: task ?? null });
+    },
+    [logEvent]
+  );
 
-  const scheduleNextMessage = () => {
+  const scheduleNextMessage = useCallback(() => {
     const ms = 20000 + Math.floor(Math.random() * 10000);
-    if (typeof window !== "undefined") {
-      generatorTimeout.current = window.setTimeout(() => {
-        const source = HUMAN_SOURCES[Math.floor(Math.random() * HUMAN_SOURCES.length)];
-        const pool: Array<{ text: string; task?: TaskKey }> = [
-          { text: "Are you done with sprint 1?", task: undefined },
-          { text: "Can you pick up the kids after work?", task: undefined },
-          { text: "Change title colour to Red", task: undefined },
-          { text: "Fix alt in img1", task: "alt" },
-          { text: "Fix input validation", task: "validation" },
-          { text: "Fix user login", task: "login" },
-          { text: "Fix secure database", task: "database" },
-        ];
-        const item = pool[Math.floor(Math.random() * pool.length)];
+    if (typeof window === "undefined") return;
+    generatorTimeout.current = window.setTimeout(() => {
+      const source = HUMAN_SOURCES[Math.floor(Math.random() * HUMAN_SOURCES.length)];
+      const pool: Array<{ text: string; task?: TaskKey }> = [
+        { text: "Are you done with sprint 1?", task: undefined },
+        { text: "Can you pick up the kids after work?", task: undefined },
+        { text: "Change title colour to Red", task: undefined },
+        { text: "Fix alt in img1", task: "alt" },
+        { text: "Fix input validation", task: "validation" },
+        { text: "Fix user login", task: "login" },
+        { text: "Fix secure database", task: "database" },
+      ];
+      const item = pool[Math.floor(Math.random() * pool.length)];
 
-        if (item.task) {
-          setTasks((prev) => {
-            const t = prev[item.task!];
+      if (item.task) {
+        setTasks((prev) => {
+          const existing = prev[item.task!];
+          if (!existing || existing.status === "fixed") {
+            return prev;
+          }
+          if (existing.firstAt) {
+            return prev;
+          }
+          return {
+            ...prev,
+            [item.task!]: { ...existing, firstAt: Date.now() },
+          };
+        });
+      }
 
-            if (!t.firstAt && t.status !== "fixed") {
-              t.firstAt = Date.now();
-            }
-            return { ...prev, [item.task!]: { ...t } };
-          });
-        }
-
-        pushFeed(source, item.text, item.task);
-        scheduleNextMessage();
-      }, ms);
-    }
-  };
-
+      pushFeed(source, item.text, item.task);
+      scheduleNextMessage();
+    }, ms);
+  }, [pushFeed]);
 
   useEffect(() => {
     pushFeed("boss", "Welcome to the sprint – stay focused.");
@@ -105,52 +112,53 @@ export default function CourtRoom() {
     return () => {
       if (generatorTimeout.current) window.clearTimeout(generatorTimeout.current);
     };
+  }, [pushFeed, scheduleNextMessage]);
 
-  }, []);
+  const tick = useCallback(() => {
+    setTasks((prev) => {
+      const now = Date.now();
+      let changed = false;
+      const next: Record<TaskKey, Task> = { ...prev };
+      (Object.keys(prev) as TaskKey[]).forEach((k) => {
+        const task = next[k];
+        if (!task.firstAt || task.status === "fixed" || task.status === "court") {
+          return;
+        }
+        const dt = now - task.firstAt;
 
+        if (dt >= TWO_MIN && !task.urgentAt) {
+          next[k] = { ...task, urgentAt: now, status: "urgent" };
+          changed = true;
+          pushFeed("agile", `URGENT: ${task.label}`, task.key);
+          logEvent("court_urgent", { task: task.key });
+          return;
+        }
+
+        if (dt >= 2 * TWO_MIN && task.status !== "court") {
+          const law = task.lawOnFail
+            ? ` – fined for breaking ${task.lawOnFail}.`
+            : k === "login"
+            ? " – declared bankruptcy (no one can use your app)."
+            : k === "database"
+            ? " – hacked; breaking Laws of Tort."
+            : ".";
+          next[k] = { ...task, courtAt: now, status: "court" };
+          changed = true;
+          pushFeed("system", `COURT: "${task.label}" escalated${law}`, task.key);
+          logEvent("court_court", { task: task.key, law: task.lawOnFail || null });
+        }
+      });
+      return changed ? next : prev;
+    });
+  }, [logEvent, pushFeed]);
 
   useEffect(() => {
-    const tick = () => {
-      setTasks((prev) => {
-        const now = Date.now();
-        const next = { ...prev };
-        (Object.keys(prev) as TaskKey[]).forEach((k) => {
-          const t = next[k];
-          if (t.status === "fixed" || t.status === "court") return;
-          if (!t.firstAt) return;
-          const dt = now - t.firstAt;
-          
-          if (dt >= TWO_MIN && !t.urgentAt) {
-            t.urgentAt = now;
-            t.status = "urgent";
-            pushFeed("agile", `URGENT: ${t.label}`, t.key);
-            logEvent("court_urgent", { task: t.key });
-          }
-
-          if (dt >= 2 * TWO_MIN) {
-            t.courtAt = now;
-            t.status = "court";
-            const law = t.lawOnFail
-              ? ` – fined for breaking ${t.lawOnFail}.`
-              : k === "login"
-              ? " – declared bankruptcy (no one can use your app)."
-              : k === "database"
-              ? " – hacked; breaking Laws of Tort."
-              : ".";
-            pushFeed("system", `COURT: "${t.label}" escalated${law}`, t.key);
-            logEvent("court_court", { task: t.key, law: t.lawOnFail || null });
-          }
-        });
-        return next;
-      });
-    };
-    if (typeof window !== "undefined") {
-      escalateInterval.current = window.setInterval(tick, 5000);
-    }
+    if (typeof window === "undefined") return;
+    escalateInterval.current = window.setInterval(tick, 5000);
     return () => {
       if (escalateInterval.current) window.clearInterval(escalateInterval.current);
     };
-  }, []);
+  }, [tick]);
 
   const anyCourt = useMemo(() => Object.values(tasks).some((t) => t.status === "court"), [tasks]);
 
@@ -313,7 +321,7 @@ export default function CourtRoom() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
           <div className="w-full max-w-lg rounded-xl border bg-white p-6 text-gray-900 shadow-2xl dark:border-gray-700 dark:bg-gray-900 dark:text-white">
             <div className="flex items-center gap-3 mb-2">
-              <img src="/gavel.svg" alt="gavel" className="h-8 w-8" />
+              <Image src="/gavel.svg" alt="gavel" className="h-8 w-8" width={32} height={32} />
               <h3 className="text-xl font-semibold">Escalation Notice</h3>
             </div>
             <p className="text-sm text-gray-700 dark:text-gray-300 mb-4">

@@ -3,19 +3,18 @@ import React, { useState, useEffect } from "react";
 import { motion, Variants } from "framer-motion";
 
 const TYPE_SPEED = 40; 
+const TEXTS = {
+  heading: "About Me",
+  name: "Name: Rohan Khurana",
+  studentId: "Student ID: 21358295",
+  description:
+    "This page is part of my HTML5 Tabs Generator assignment. It gives a quick overview and a short walkthrough video.",
+  howToUseHeading: "How to Use This Site",
+  howToUseText:
+    "Use the generator on the home page to add tab labels and content. When you're ready, export a single self‑contained file and open it in your browser. If you like, save it as Hello.html.",
+};
 
 const About: React.FC = () => {
-  const texts = {
-    heading: "About Me",
-    name: "Name: Rohan Khurana",
-    studentId: "Student ID: 21358295",
-    description:
-      "This page is part of my HTML5 Tabs Generator assignment. It gives a quick overview and a short walkthrough video.",
-    howToUseHeading: "How to Use This Site",
-    howToUseText:
-      "Use the generator on the home page to add tab labels and content. When you're ready, export a single self‑contained file and open it in your browser. If you like, save it as Hello.html.",
-  };
-
   const [typedHeading, setTypedHeading] = useState("");
   const [typedName, setTypedName] = useState("");
   const [typedStudentId, setTypedStudentId] = useState("");
@@ -40,20 +39,20 @@ const About: React.FC = () => {
 
   useEffect(() => {
     const headingDelay = 0;
-    const nameDelay = texts.heading.length * TYPE_SPEED + 300;
-    const studentIdDelay = nameDelay + texts.name.length * TYPE_SPEED + 300;
-    const descDelay = studentIdDelay + texts.studentId.length * TYPE_SPEED + 300;
+    const nameDelay = TEXTS.heading.length * TYPE_SPEED + 300;
+    const studentIdDelay = nameDelay + TEXTS.name.length * TYPE_SPEED + 300;
+    const descDelay = studentIdDelay + TEXTS.studentId.length * TYPE_SPEED + 300;
     const howToHeadingDelay =
-      descDelay + texts.description.length * TYPE_SPEED + 300;
+      descDelay + TEXTS.description.length * TYPE_SPEED + 300;
     const howToTextDelay =
-      howToHeadingDelay + texts.howToUseHeading.length * TYPE_SPEED + 400;
+      howToHeadingDelay + TEXTS.howToUseHeading.length * TYPE_SPEED + 400;
 
-    typeWriter(texts.heading, setTypedHeading, headingDelay);
-    typeWriter(texts.name, setTypedName, nameDelay);
-    typeWriter(texts.studentId, setTypedStudentId, studentIdDelay);
-    typeWriter(texts.description, setTypedDescription, descDelay);
-    typeWriter(texts.howToUseHeading, setTypedHowToUseHeading, howToHeadingDelay);
-    typeWriter(texts.howToUseText, setTypedHowToUseText, howToTextDelay);
+    typeWriter(TEXTS.heading, setTypedHeading, headingDelay);
+    typeWriter(TEXTS.name, setTypedName, nameDelay);
+    typeWriter(TEXTS.studentId, setTypedStudentId, studentIdDelay);
+    typeWriter(TEXTS.description, setTypedDescription, descDelay);
+    typeWriter(TEXTS.howToUseHeading, setTypedHowToUseHeading, howToHeadingDelay);
+    typeWriter(TEXTS.howToUseText, setTypedHowToUseText, howToTextDelay);
   }, []);
 
   const containerVariants: Variants = {

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 
 type Hotspot = {
@@ -32,9 +33,7 @@ function uid() {
 }
 
 export default function EscapeBuilderPage() {
-  const [backgroundUrl, setBackgroundUrl] = useState<string>(
-    "/escape-room.svg"
-  );
+  const [backgroundUrl, setBackgroundUrl] = useState<string>("/escape_room.png");
   const [hotspots, setHotspots] = useState<Hotspot[]>([
     {
       id: uid(),
@@ -340,11 +339,14 @@ function HotspotEditor(props: {
       onMouseUp={onMouseUp}
       onMouseLeave={onMouseUp}
     >
-      <img
+      <Image
         src={backgroundUrl}
         alt="Background"
-        className="absolute inset-0 h-full w-full object-cover"
+        className="object-cover"
         draggable={false}
+        fill
+        sizes="(max-width: 1024px) 100vw, 900px"
+        unoptimized
       />
       {hotspots.map((h) => (
         <div
@@ -402,7 +404,7 @@ function ExportActions({ schema }: { schema: SchemaV1 }) {
       }
       const created = await res.json();
       alert(`Saved ✓ (id: ${created.id})`);
-    } catch (e) {
+    } catch {
       alert("Save failed");
     }
   };
@@ -465,7 +467,14 @@ function Runtime({ schema }: { schema: SchemaV1 }) {
 
   return (
     <div className="relative w-full overflow-hidden rounded border" style={{ paddingTop: "56.25%" }}>
-      <img src={backgroundUrl} alt="Background" className="absolute inset-0 h-full w-full object-cover" />
+      <Image
+        src={backgroundUrl}
+        alt="Background"
+        className="object-cover"
+        fill
+        sizes="(max-width: 1024px) 100vw, 900px"
+        unoptimized
+      />
       {hotspots.map((h) => (
         <button
           key={h.id}

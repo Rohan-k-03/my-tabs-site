@@ -1,6 +1,6 @@
-const test = require("node:test");
-const assert = require("node:assert/strict");
-const { buildStandaloneMarkup } = require("../src/lib/tabMarkup.js");
+import test from "node:test";
+import assert from "node:assert/strict";
+import { buildStandaloneMarkup } from "../src/lib/tabMarkup.js";
 
 test("buildStandaloneMarkup outputs inline styles and script", () => {
   const html = buildStandaloneMarkup(["Alpha", "Beta"], ["A", "B"], 0);
